@@ -649,16 +649,13 @@ function LeaderboardPage() {
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-                className="w-6 h-6"
+                className="w-9 h-9"
               >
-                <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-white">
-                  <path 
-                    d="M12 2L22 20H2L12 2Z" 
-                    fill="currentColor"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  />
-                </svg>
+                <img 
+                  src="/src/pages/2896418.png" 
+                  alt="CoderWorld Logo" 
+                  className="w-full h-full object-contain"
+                />
               </motion.div>
             </motion.div>
             

@@ -338,7 +338,7 @@ function LeetCodeStylePage() {
                             <motion.div
                                 whileHover={{ rotate: 360 }}
                                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                                className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/25 border border-cyan-400/20 group-hover:shadow-cyan-500/40 transition-all duration-300"
+                                className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/25 border border-cyan-400/20 group-hover:shadow-cyan-500/40 transition-all duration-300"
                             >
                                 <motion.div
                                     animate={{ 
@@ -350,16 +350,13 @@ function LeetCodeStylePage() {
                                         repeat: Infinity, 
                                         ease: "easeInOut" 
                                     }}
-                                    className="w-6 h-6"
+                                    className="w-12 h-12"
                                 >
-                                    <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-white">
-                                        <path 
-                                            d="M12 2L22 20H2L12 2Z" 
-                                            fill="currentColor"
-                                            stroke="currentColor"
-                                            strokeWidth="1"
-                                        />
-                                    </svg>
+                                    <img 
+                                        src="/src/pages/2896418.png" 
+                                        alt="CoderWorld Logo" 
+                                        className="w-full h-full object-contain"
+                                    />
                                 </motion.div>
                             </motion.div>
                             
@@ -367,7 +364,7 @@ function LeetCodeStylePage() {
                             <div className="flex flex-col">
                                 <motion.span 
                                     whileHover={{ scale: 1.02 }}
-                                    className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300"
+                                    className="text-3xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300"
                                     style={{ fontFamily: "'Orbitron', sans-serif" }}
                                 >
                                     CoderWorld
@@ -375,7 +372,7 @@ function LeetCodeStylePage() {
                                 <motion.span 
                                     initial={{ opacity: 0.7 }}
                                     whileHover={{ opacity: 1 }}
-                                    className="text-xs text-slate-400 group-hover:text-cyan-400 transition-colors duration-300"
+                                    className="text-sm text-slate-400 group-hover:text-cyan-400 transition-colors duration-300"
                                     style={{ fontFamily: "'Source Code Pro', monospace" }}
                                 >
                                     Code • Learn • Solve
@@ -388,16 +385,17 @@ function LeetCodeStylePage() {
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={fetchAllProblems} 
-                            className="cursor-pointer text-cyan-300 text-sm hover:text-cyan-200 hover:underline transition-all duration-300 px-3 py-2 rounded-lg hover:bg-slate-800/50"
+                            className="cursor-pointer text-cyan-300 hover:text-cyan-200 hover:underline transition-all duration-300 px-4 py-3 rounded-lg hover:bg-slate-800/50 flex items-center gap-2"
                             style={{ fontFamily: "'Source Code Pro', monospace" }}
                         >
-                            📘 Problems
+                              <img src="/src/pages/3240846.png" alt="Problems" className="w-10 h-10 justify-align-start padding-10" /> 
+                              <span className="text-xl font-bold w-20 justify-align-start padding-10">Problems</span>
                         </motion.div>
                     </div>
 
                     {showProblemList && (
                         <div className="bg-gray-900 border border-gray-700 p-3 rounded max-h-60 overflow-y-auto">
-                            <h3 className="text-lg font-semibold mb-2">All Problems</h3>
+                            <h3 className="text-xl font-bold mb-2">All Problems</h3>
                             <ul className="space-y-1">
                                 {allProblems.map((p, index) => (
                                     <motion.li 
@@ -408,7 +406,7 @@ function LeetCodeStylePage() {
                                         whileHover={{ scale: 1.02, x: 5 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => navigate(`/problem/${p._id}`)} 
-                                        className="problem-list-item text-cyan-300 cursor-pointer hover:text-cyan-200 hover:underline transition-all duration-300 py-1 px-2 rounded hover:bg-gray-800/50"
+                                        className="problem-list-item text-cyan-300 cursor-pointer hover:text-cyan-200 hover:underline transition-all duration-300 py-1 px-2 rounded hover:bg-gray-800/50 text-base font-medium"
                                     >
                                         ➤ {p.title}
                                     </motion.li>
@@ -424,7 +422,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setActiveTab(tab)} 
-                                className={`py-2 cursor-pointer transition-all duration-300 ${
+                                className={`py-2 cursor-pointer transition-all duration-300 text-base font-medium ${
                                     activeTab === tab 
                                         ? "text-cyan-400 border-b-2 border-cyan-400" 
                                         : "hover:text-white hover:border-b-2 hover:border-gray-400"
@@ -441,7 +439,7 @@ function LeetCodeStylePage() {
                             <>
                                 <motion.h2 
                                     whileHover={{ scale: 1.02 }}
-                                    className="text-xl font-bold mt-3 text-white"
+                                    className="text-2xl font-bold mt-3 text-white"
                                     style={{ fontFamily: "'Orbitron', sans-serif" }}
                                 >
                                     {problem?.title}
@@ -626,7 +624,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleRun} 
-                                className="btn btn-info btn-sm transition-all duration-200"
+                                className="btn btn-info btn-sm transition-all duration-200 font-bold"
                             >
                                 Run
                             </motion.button>
@@ -634,7 +632,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleSubmit} 
-                                className="btn btn-success btn-sm transition-all duration-200"
+                                className="btn btn-success btn-sm transition-all duration-200 font-bold"
                             >
                                 Submit
                             </motion.button>
@@ -649,7 +647,7 @@ function LeetCodeStylePage() {
                                     console.log("Test URL:", url);
                                     navigate(url);
                                 }}
-                                className="btn btn-warning btn-sm transition-all duration-200"
+                                className="btn btn-warning btn-sm transition-all duration-200 font-bold"
                             >
                                 Test Write Solution
                             </motion.button>
@@ -660,7 +658,7 @@ function LeetCodeStylePage() {
                                     navigator.clipboard.writeText(code);
                                     alert("Code copied to clipboard!");
                                 }}
-                                className="btn btn-primary btn-sm transition-all duration-200"
+                                className="btn btn-primary btn-sm transition-all duration-200 font-bold"
                             >
                                 Copy
                             </motion.button>
@@ -668,7 +666,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleResetCode} 
-                                className="btn btn-warning btn-sm transition-all duration-200"
+                                className="btn btn-warning btn-sm transition-all duration-200 font-bold"
                             >
                                 Reset
                             </motion.button>
@@ -676,7 +674,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleFormatCode} 
-                                className="btn btn-secondary btn-sm transition-all duration-200"
+                                className="btn btn-secondary btn-sm transition-all duration-200 font-bold"
                             >
                                 Format
                             </motion.button>
@@ -684,7 +682,7 @@ function LeetCodeStylePage() {
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleFullScreen} 
-                                className="btn btn-outline btn-sm transition-all duration-200"
+                                className="btn btn-outline btn-sm transition-all duration-200 font-bold"
                             >
                                 {isFullScreen ? "Exit Fullscreen" : "Fullscreen"}
                             </motion.button>

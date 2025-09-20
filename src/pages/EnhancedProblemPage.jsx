@@ -750,16 +750,13 @@ function EnhancedProblemPage() {
                                                 repeat: Infinity, 
                                                 ease: "easeInOut" 
                                             }}
-                                            className="w-5 h-5"
+                                            className="w-8 h-8"
                                         >
-                                            <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-white">
-                                                <path 
-                                                    d="M12 2L22 20H2L12 2Z" 
-                                                    fill="currentColor"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1"
-                                                />
-                                            </svg>
+                                            <img 
+                                                src="/src/pages/2896418.png" 
+                                                alt="CoderWorld Logo" 
+                                                className="w-full h-full object-contain"
+                                            />
                                         </motion.div>
                                     </motion.div>
                                     
