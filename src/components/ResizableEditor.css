@@ -1,0 +1,90 @@
+/* Resizable Editor Styles */
+.resizable-editor {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.resizable-editor textarea {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background: #ffffff;
+    color: #374151;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border: none;
+    outline: none;
+    resize: none;
+    tab-size: 4;
+}
+
+.resizable-editor textarea::placeholder {
+    color: #9ca3af;
+}
+
+.resizable-editor .resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0.5rem;
+    background: #e5e7eb;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.resizable-editor .resize-handle:hover {
+    background: #d1d5db;
+}
+
+.resizable-editor .resize-handle:active {
+    background: #9ca3af;
+}
+
+/* Syntax highlighting for different languages */
+.language-javascript {
+    color: #374151;
+}
+
+.language-java {
+    color: #374151;
+}
+
+.language-cpp {
+    color: #374151;
+}
+
+/* Line numbers simulation */
+.resizable-editor.with-line-numbers {
+    counter-reset: line;
+}
+
+.resizable-editor.with-line-numbers textarea {
+    counter-increment: line;
+    padding-left: 3rem;
+}
+
+/* Custom scrollbar */
+.resizable-editor textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.resizable-editor textarea::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+.resizable-editor textarea::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+}
+
+.resizable-editor textarea::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
