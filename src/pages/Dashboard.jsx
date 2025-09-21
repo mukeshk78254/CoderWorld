@@ -6,6 +6,7 @@ import { AlertTriangle } from 'lucide-react'; // Removed WifiOff as it wasn't us
 import Header from '../components/dashboard/Header';
 import MainContent from '../components/dashboard/MainContent';
 import ProfileSidebar from '../components/dashboard/ProfileSidebar';
+import ProfileImageTest from '../components/ProfileImageTest';
 
 // ✨ ENHANCED: Interactive Particle Background Component
 // This is now more dynamic. For better organization, you can move this to its own file, 
@@ -139,7 +140,42 @@ const useDashboardStats = (user) => {
                 await new Promise(res => setTimeout(res, 500));
                 // Ensure user.id is correctly passed from Redux store
                 const { data } = await axiosClient.get(`/user/${user.id}/dashboard-pro`);
-                setStats(data);
+                
+                // Add mock solved skills data if not present
+                const enhancedData = {
+                    ...data,
+                    solvedTags: data.solvedTags || [
+                        'Array', 'String', 'Hash Table', 'Dynamic Programming', 
+                        'Math', 'Sorting', 'Greedy', 'Depth-First Search',
+                        'Binary Search', 'Tree', 'Breadth-First Search', 'Matrix',
+                        'Two Pointers', 'Bit Manipulation', 'Stack', 'Heap',
+                        'Graph', 'Design', 'Backtracking', 'Sliding Window'
+                    ],
+                    solvedStats: data.solvedStats || {
+                        'array': 15,
+                        'string': 12,
+                        'hash table': 8,
+                        'dynamic programming': 6,
+                        'math': 10,
+                        'sorting': 7,
+                        'greedy': 5,
+                        'depth-first search': 9,
+                        'binary search': 4,
+                        'tree': 11,
+                        'breadth-first search': 6,
+                        'matrix': 3,
+                        'two pointers': 8,
+                        'bit manipulation': 2,
+                        'stack': 7,
+                        'heap': 4,
+                        'graph': 5,
+                        'design': 3,
+                        'backtracking': 4,
+                        'sliding window': 6
+                    }
+                };
+                
+                setStats(enhancedData);
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
                 setError(err);
@@ -206,12 +242,46 @@ function Dashboard() {
             return (
                 <motion.div
                     key="content"
-                    className="container mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+                    className="min-h-screen"
                     initial="hidden" animate="visible" exit={{ opacity: 0 }}
                     variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
                 >
-                    <div className="lg:col-span-3"><ProfileSidebar user={user} stats={stats} /></div>
-                    <div className="lg:col-span-9"><MainContent stats={stats} /></div>
+                    {/* Enhanced Header Section */}
+                    <div className="w-full px-6 py-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="text-center mb-8"
+                        >
+                            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                                Coding Dashboard
+                            </h1>
+                            <p className="text-xl text-slate-300 font-medium">
+                                Track your progress, analyze your skills, and achieve your coding goals
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    {/* Main Content with Better Accommodation */}
+                    <div className="w-full px-6 pb-8">
+                        <div className="max-w-7xl mx-auto space-y-8">
+                            {/* Top Section - Profile and Stats */}
+                            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                                <div className="xl:col-span-1">
+                                    <ProfileSidebar user={user} stats={stats} />
+                                </div>
+                                <div className="xl:col-span-3">
+                                    <MainContent stats={stats} />
+                                </div>
+                            </div>
+                            
+                            {/* Test Component - Remove this after testing */}
+                            <div className="mt-8">
+                                <ProfileImageTest />
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
             );
         }

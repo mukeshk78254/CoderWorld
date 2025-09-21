@@ -332,58 +332,106 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-base-200">
-      <div className="card w-96 bg-base-100 shadow-xl">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)',
+        backgroundSize: '400% 400%',
+        animation: 'gradient-shift 20s ease infinite'
+      }}
+    >
+      {/* Futuristic Tech Background Overlay */}
+      <div 
+        className="absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 800\'%3E%3Cdefs%3E%3ClinearGradient id=\'tech\' x1=\'0%25\' y1=\'0%25\' x2=\'100%25\' y2=\'100%25\'%3E%3Cstop offset=\'0%25\' style=\'stop-color:%2306b6d4;stop-opacity:0.3\' /%3E%3Cstop offset=\'50%25\' style=\'stop-color:%233b82f6;stop-opacity:0.2\' /%3E%3Cstop offset=\'100%25\' style=\'stop-color:%238b5cf6;stop-opacity:0.3\' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=\'1200\' height=\'800\' fill=\'url(%23tech)\'/%3E%3Ccircle cx=\'100\' cy=\'100\' r=\'3\' fill=\'%2306b6d4\' opacity=\'0.6\'/%3E%3Ccircle cx=\'300\' cy=\'150\' r=\'2\' fill=\'%233b82f6\' opacity=\'0.8\'/%3E%3Ccircle cx=\'500\' cy=\'80\' r=\'4\' fill=\'%238b5cf6\' opacity=\'0.7\'/%3E%3Ccircle cx=\'700\' cy=\'120\' r=\'2.5\' fill=\'%2306b6d4\' opacity=\'0.9\'/%3E%3Ccircle cx=\'900\' cy=\'90\' r=\'3.5\' fill=\'%233b82f6\' opacity=\'0.6\'/%3E%3Ccircle cx=\'1100\' cy=\'140\' r=\'2\' fill=\'%238b5cf6\' opacity=\'0.8\'/%3E%3Crect x=\'50\' y=\'200\' width=\'200\' height=\'2\' fill=\'%2306b6d4\' opacity=\'0.4\' transform=\'rotate(15 150 201)\'/%3E%3Crect x=\'250\' y=\'300\' width=\'150\' height=\'2\' fill=\'%233b82f6\' opacity=\'0.5\' transform=\'rotate(-20 325 301)\'/%3E%3Crect x=\'450\' y=\'250\' width=\'180\' height=\'2\' fill=\'%238b5cf6\' opacity=\'0.3\' transform=\'rotate(30 540 251)\'/%3E%3Crect x=\'650\' y=\'350\' width=\'160\' height=\'2\' fill=\'%2306b6d4\' opacity=\'0.6\' transform=\'rotate(-15 730 351)\'/%3E%3Crect x=\'850\' y=\'280\' width=\'140\' height=\'2\' fill=\'%233b82f6\' opacity=\'0.4\' transform=\'rotate(25 920 281)\'/%3E%3Crect x=\'1050\' y=\'320\' width=\'120\' height=\'2\' fill=\'%238b5cf6\' opacity=\'0.5\' transform=\'rotate(-10 1110 321)\'/%3E%3C/svg%3E")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* Floating tech particles */}
+      <div className="absolute inset-0">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400 rounded-full opacity-40 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 4}s`,
+              animationDuration: `${3 + Math.random() * 2}s`,
+              boxShadow: '0 0 10px #06b6d4'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Glowing platform effect */}
+      <div 
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 opacity-20"
+        style={{
+          background: 'radial-gradient(ellipse, #06b6d4 0%, transparent 70%)',
+          filter: 'blur(20px)'
+        }}
+      />
+
+      <div className="card w-96 bg-black/30 backdrop-blur-lg shadow-2xl border border-cyan-400/20 relative z-10">
         <div className="card-body">
-          <h2 className="card-title justify-center text-3xl mb-6">Create Account</h2>
+          <h2 className="card-title justify-center text-3xl text-white font-bold mb-6">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Create Account
+            </span>
+          </h2>
+          
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* First Name Field */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text">First Name</span>
+                <span className="label-text text-white/90">First Name</span>
               </label>
               <input
                 type="text"
                 placeholder="John"
-                className={`input input-bordered w-full ${errors.firstname ? 'input-error' : ''}`} 
+                className={`input input-bordered w-full bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400 ${errors.firstname ? 'input-error border-red-400' : ''}`} 
                 {...register('firstname')}
               />
               {errors.firstname && (
-                <span className="text-error text-sm mt-1">{errors.firstname.message}</span>
+                <span className="text-red-400 text-sm mt-1">{errors.firstname.message}</span>
               )}
             </div>
 
             {/* Email Field */}
             <div className="form-control mt-4">
               <label className="label">
-                <span className="label-text">Email</span>
+                <span className="label-text text-white/90">Email</span>
               </label>
               <input
                 type="email"
                 placeholder="john@example.com"
-                className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`}
+                className={`input input-bordered w-full bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400 ${errors.emailId ? 'input-error border-red-400' : ''}`}
                 {...register('emailId')}
               />
               {errors.emailId && (
-                <span className="text-error text-sm mt-1">{errors.emailId.message}</span>
+                <span className="text-red-400 text-sm mt-1">{errors.emailId.message}</span>
               )}
             </div>
 
             {/* Password Field with Toggle */}
             <div className="form-control mt-4">
               <label className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text text-white/90">Password</span>
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className={`input input-bordered w-full pr-10 ${errors.password ? 'input-error' : ''}`}
+                  className={`input input-bordered w-full pr-10 bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-cyan-400 ${errors.password ? 'input-error border-red-400' : ''}`}
                   {...register('password')}
                 />
                 <button
                   type="button"
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-white/70 hover:text-cyan-400 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
@@ -400,7 +448,7 @@ function Signup() {
                 </button>
               </div>
               {errors.password && (
-                <span className="text-error text-sm mt-1">{errors.password.message}</span>
+                <span className="text-red-400 text-sm mt-1">{errors.password.message}</span>
               )}
             </div>
 
@@ -408,25 +456,43 @@ function Signup() {
             <div className="form-control mt-8 flex justify-center"> 
               <button
                 type="submit"
-                className={`btn btn-primary ${loading ? 'loading' : ''}`}
+                className="btn bg-gradient-to-r from-cyan-600 to-blue-600 border-none text-white hover:from-cyan-700 hover:to-blue-700 shadow-lg"
                 disabled={loading}
               >
-                {loading ? 'Signing Up...' : 'Sign Up'}
+                {loading ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Signing Up...
+                  </>
+                ) : (
+                  'Sign Up'
+                )}
               </button>
             </div>
           </form>
 
           {/* Login Redirect */}
           <div className="text-center mt-6">
-            <span className="text-sm">
+            <span className="text-white/70 text-sm">
               Already have an account?{' '}
-              <NavLink to="/login" className="link link-primary">
+              <NavLink 
+                to="/login" 
+                className="text-cyan-400 hover:text-blue-400 font-medium transition-colors duration-200"
+              >
                 Login
               </NavLink>
             </span>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
     </div>
   );
 }

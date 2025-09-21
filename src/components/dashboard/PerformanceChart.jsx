@@ -29,7 +29,7 @@ function PerformanceChart({ data }) {
         >
             <div className="flex items-center gap-3 mb-4">
                 <BarChart3 className="text-cyan-400" size={20} />
-                <h3 className="font-bold text-white">7-Day Performance</h3>
+                <h3 className="font-black text-white text-lg">📈 7-Day Performance</h3>
             </div>
             <div style={{ width: '100%', height: 200 }}>
                 <ResponsiveContainer>

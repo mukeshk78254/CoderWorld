@@ -174,6 +174,7 @@ import { Routes, Route, Navigate } from "react-router";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
+import Settings from "./pages/Settings";
 import EnhancedHomepage from "./pages/EnhancedHomepage";
 import ProblemListPage from "./pages/ProblemListPage";
 import EnhancedContestPage from "./pages/EnhancedContestPage";
@@ -199,11 +200,14 @@ import AdminUpload from "./components/AdminUpload";
 import ProfilePage from './pages/ProfilePage';
 import Dashboard from './pages/Dashboard'; // <-- Import Dashboard
 import EnhancedDashboard from './pages/EnhancedDashboard'; // <-- Import Enhanced Dashboard
+import RealTimeDashboard from './pages/RealTimeDashboard'; // <-- Import Real Time Dashboard
 import TransactionPage from './pages/TransactionPage'; // <-- Import TransactionPage
 import DiscussPage from './pages/DiscussPage'; // <-- Import DiscussPage
 import ContestOpeningSoon from './pages/ContestOpeningSoon'; // <-- Import ContestOpeningSoon
 import ContestEnded from './pages/ContestEnded'; // <-- Import ContestEnded
 import { NotificationManager } from './components/NotificationSystem'; // <-- Import NotificationManager
+import { ThemeProvider } from './context/ThemeContext'; // <-- Import ThemeProvider
+import { SettingsProvider } from './context/SettingsContext'; // <-- Import SettingsProvider
 
 function App() {
   const dispatch = useDispatch();
@@ -222,15 +226,17 @@ function App() {
   }
     
   return (
-    <>
-      <NotificationManager />
-      <Routes>
+    <ThemeProvider>
+      <SettingsProvider>
+        <NotificationManager />
+        <Routes>
         <Route path="/" element={isAuthenticated ? <EnhancedHomepage /> : <Navigate to="/login" />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
         <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
         
         {/* Protected Routes */}
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
+    
         <Route path="/problems" element={isAuthenticated ? <ProblemListPage /> : <Navigate to="/login" />} />
         <Route path="/problem/:problemid" element={<LeetCodeStylePage/>} />
         <Route path="/problem/:problemid/write-solution" element={<WriteSolutionPage />} />
@@ -239,6 +245,7 @@ function App() {
         <Route path="/leaderboard" element={isAuthenticated ? <EnhancedLeaderboardPage /> : <Navigate to="/login" />} />
         <Route path="/discuss" element={isAuthenticated ? <EnhancedDiscussPage /> : <Navigate to="/login" />} />
         <Route path="/profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
+        <Route path="/settings" element={isAuthenticated ? <Settings /> : <Navigate to="/login" />} />
         <Route path="/transactions" element={isAuthenticated ? <TransactionPage /> : <Navigate to="/login" />} />
         <Route path="/contest/opening-soon" element={isAuthenticated ? <ContestOpeningSoon /> : <Navigate to="/login" />} />
         <Route path="/contest/ended" element={isAuthenticated ? <ContestEnded /> : <Navigate to="/login" />} />
@@ -249,8 +256,9 @@ function App() {
         <Route path="/admin/delete" element={isAuthenticated && user?.role === 'admin' ? <AdminDelete /> : <Navigate to="/" />} />
         <Route path="/admin/video" element={isAuthenticated && user?.role === 'admin' ? <AdminVideo /> : <Navigate to="/" />} />
         <Route path="/admin/upload/:problemid" element={isAuthenticated && user?.role === 'admin' ? <AdminUpload /> : <Navigate to="/" />} />
-      </Routes>
-    </>
+        </Routes>
+      </SettingsProvider>
+    </ThemeProvider>
   );
 }
 

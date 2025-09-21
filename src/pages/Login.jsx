@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import {loginUser} from "../authSlice"
 import { useEffect } from 'react';
 
@@ -34,54 +34,118 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4"> {/* Centering container */}
-      <div className="card w-96 bg-base-100 shadow-xl"> {/* Existing card styling */}
-        <div className="card-body">
-          <h2 className="card-title justify-center text-3xl">Leetcode</h2> {/* Centered title */}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Existing form fields */}
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%)',
+        backgroundSize: '400% 400%',
+        animation: 'gradient-shift 15s ease infinite'
+      }}
+    >
+      {/* Desert Night Background Overlay */}
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 800\'%3E%3Cdefs%3E%3ClinearGradient id=\'sky\' x1=\'0%25\' y1=\'0%25\' x2=\'0%25\' y2=\'100%25\'%3E%3Cstop offset=\'0%25\' style=\'stop-color:%234a1a78;stop-opacity:1\' /%3E%3Cstop offset=\'50%25\' style=\'stop-color:%236b46c1;stop-opacity:1\' /%3E%3Cstop offset=\'100%25\' style=\'stop-color:%238b5cf6;stop-opacity:1\' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=\'1200\' height=\'800\' fill=\'url(%23sky)\'/%3E%3Ccircle cx=\'200\' cy=\'150\' r=\'2\' fill=\'white\' opacity=\'0.8\'/%3E%3Ccircle cx=\'400\' cy=\'100\' r=\'1.5\' fill=\'white\' opacity=\'0.6\'/%3E%3Ccircle cx=\'600\' cy=\'120\' r=\'2.5\' fill=\'white\' opacity=\'0.9\'/%3E%3Ccircle cx=\'800\' cy=\'80\' r=\'1\' fill=\'white\' opacity=\'0.7\'/%3E%3Ccircle cx=\'1000\' cy=\'140\' r=\'2\' fill=\'white\' opacity=\'0.8\'/%3E%3Cpolygon points=\'0,400 200,350 400,380 600,360 800,370 1000,340 1200,380 1200,800 0,800\' fill=\'%23374151\' opacity=\'0.8\'/%3E%3Cpolygon points=\'0,450 150,420 300,440 450,430 600,435 750,425 900,430 1050,420 1200,440 1200,800 0,800\' fill=\'%234b5563\' opacity=\'0.6\'/%3E%3Cpolygon points=\'0,500 100,480 200,490 300,485 400,488 500,482 600,485 700,480 800,485 900,482 1000,485 1100,480 1200,490 1200,800 0,800\' fill=\'%23555b69\' opacity=\'0.4\'/%3E%3C/svg%3E")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* Floating particles for stars */}
+      <div className="absolute inset-0">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full opacity-60 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
 
-            <div className="form-control  mt-4">
+      <div className="card w-96 bg-black/20 backdrop-blur-md shadow-2xl border border-white/10 relative z-10">
+        <div className="card-body">
+          <h2 className="card-title justify-center text-3xl text-white font-bold mb-6">
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              LeetCode
+            </span>
+          </h2>
+          
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control mt-4">
               <label className="label mb-1">
-                <span className="label-text">Email</span>
+                <span className="label-text text-white/90">Email</span>
               </label>
               <input
                 type="email"
                 placeholder="john@example.com"
-                className={`input input-bordered ${errors.emailId && 'input-error'}`}
+                className={`input input-bordered bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-purple-400 ${errors.emailId && 'input-error border-red-400'}`}
                 {...register('emailId')}
               />
               {errors.emailId && (
-                <span className="text-error">{errors.emailId.message}</span>
+                <span className="text-red-400 text-sm mt-1">{errors.emailId.message}</span>
               )}
             </div>
 
             <div className="form-control mt-4">
               <label className="label mb-1">
-                <span className="label-text">Password</span>
+                <span className="label-text text-white/90">Password</span>
               </label>
               <input
                 type="password"
                 placeholder="••••••••"
-                className={`input input-bordered ${errors.password && 'input-error'}`}
+                className={`input input-bordered bg-white/10 border-white/20 text-white placeholder-white/50 focus:border-purple-400 ${errors.password && 'input-error border-red-400'}`}
                 {...register('password')}
               />
               {errors.password && (
-                <span className="text-error">{errors.password.message}</span>
+                <span className="text-red-400 text-sm mt-1">{errors.password.message}</span>
               )}
             </div>
 
             <div className="form-control mt-6 flex justify-center">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white hover:from-purple-700 hover:to-pink-700 shadow-lg"
               >
-                Login
+                {loading ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Logging in...
+                  </>
+                ) : (
+                  'Login'
+                )}
               </button>
             </div>
           </form>
+
+          {/* Navigation to Signup */}
+          <div className="text-center mt-6">
+            <p className="text-white/70 text-sm">
+              Don't have an account?{' '}
+              <Link 
+                to="/signup" 
+                className="text-purple-400 hover:text-pink-400 font-medium transition-colors duration-200"
+              >
+                Sign Up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
     </div>
   );
 }

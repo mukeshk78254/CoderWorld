@@ -6092,6 +6092,7 @@ import {
 import axiosClient from '../utils/axiosClient';
 import { logoutUser } from '../authSlice';
 import Header from '../components/dashboard/Header';
+import { useSettings } from '../context/SettingsContext';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
@@ -6374,6 +6375,7 @@ const EditableField = ({ label, value, onSave, onCancel, isEditing, onEdit, type
 function ProfilePage() {
     const dispatch = useDispatch();
     const { user, isAuthenticated, loading: authLoading } = useSelector(state => state.auth);
+    const { settings } = useSettings();
 
     const [profileData, setProfileData] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
@@ -6428,37 +6430,38 @@ function ProfilePage() {
         }, 1000);
     };
 
-    // Sample data for static sections
-    const achievements = [
-        { id: 1, name: 'First Problem Solved', description: 'Solve your first coding problem', unlocked: true, icon: Trophy },
-        { id: 2, name: 'Streak Master', description: 'Maintain a 7-day solving streak', unlocked: true, icon: Trophy },
+    // Real data from backend - will be populated from profileData
+    const achievements = profileData?.achievements || [
+        { id: 1, name: 'First Problem Solved', description: 'Solve your first coding problem', unlocked: false, icon: Trophy },
+        { id: 2, name: 'Streak Master', description: 'Maintain a 7-day solving streak', unlocked: false, icon: Trophy },
         { id: 3, name: 'Algorithm Expert', description: 'Solve 50 algorithm problems', unlocked: false, icon: Target },
         { id: 4, name: 'Data Structure Pro', description: 'Master all data structures', unlocked: false, icon: Code },
     ];
 
-    const badges = [
-        { id: 1, name: 'Problem Solver', description: 'Solved 10 problems', unlocked: true, color: 'green' },
-        { id: 2, name: 'Quick Learner', description: 'Solved 5 problems in one day', unlocked: true, color: 'blue' },
+    const badges = profileData?.badges || [
+        { id: 1, name: 'Problem Solver', description: 'Solved 10 problems', unlocked: false, color: 'green' },
+        { id: 2, name: 'Quick Learner', description: 'Solved 5 problems in one day', unlocked: false, color: 'blue' },
         { id: 3, name: 'Consistent Coder', description: '7-day streak', unlocked: false, color: 'purple' },
         { id: 4, name: 'Algorithm Master', description: 'Solved 25 algorithm problems', unlocked: false, color: 'orange' }
     ];
 
     const stats = {
-        problemsSolved: 117,
-        totalProblems: 3617,
-        easySolved: 40,
-        easyTotal: 885,
-        mediumSolved: 62,
-        mediumTotal: 1881,
-        hardSolved: 15,
-        hardTotal: 851,
-        currentStreak: 5,
-        maxStreak: 34,
-        rank: 1081203,
-        reputation: 1,
-        views: 107,
-        solutions: 3,
-        discussions: 0
+        problemsSolved: profileData?.stats?.problemsSolved || 0,
+        totalProblems: profileData?.stats?.totalProblems || 0,
+        easySolved: profileData?.stats?.easySolved || 0,
+        easyTotal: profileData?.stats?.easyTotal || 0,
+        mediumSolved: profileData?.stats?.mediumSolved || 0,
+        mediumTotal: profileData?.stats?.mediumTotal || 0,
+        hardSolved: profileData?.stats?.hardSolved || 0,
+        hardTotal: profileData?.stats?.hardTotal || 0,
+        currentStreak: profileData?.stats?.currentStreak || 0,
+        maxStreak: profileData?.stats?.maxStreak || 0,
+        rank: profileData?.stats?.rank || 0,
+        reputation: profileData?.stats?.reputation || 0,
+        views: profileData?.stats?.views || 0,
+        solutions: profileData?.stats?.solutions || 0,
+        discussions: profileData?.stats?.discussions || 0,
+        points: profileData?.stats?.points || 0
     };
 
     const fetchProfileData = async () => {
@@ -6469,10 +6472,27 @@ function ProfilePage() {
         try {
             setPageLoading(true);
             setFetchError(null);
-            const res = await axiosClient.get('/profile');
-            setProfileData(res.data);
-            setNotificationSettings(res.data.settings?.notifications || DEFAULT_NOTIFICATION_SETTINGS_FRONTEND);
-            setPrivacySettings(res.data.settings?.privacy || DEFAULT_PRIVACY_SETTINGS_FRONTEND);
+            
+            // Fetch profile data and dashboard stats in parallel
+            const [profileRes, dashboardRes] = await Promise.all([
+                axiosClient.get('/profile'),
+                axiosClient.get(`/user/${user.id}/dashboard-pro`).catch(() => null) // Don't fail if dashboard data unavailable
+            ]);
+            
+            // Combine profile data with dashboard stats
+            const combinedData = {
+                ...profileRes.data,
+                stats: {
+                    ...profileRes.data.stats,
+                    ...dashboardRes?.data
+                },
+                badges: profileRes.data.badges || [],
+                achievements: profileRes.data.achievements || []
+            };
+            
+            setProfileData(combinedData);
+            setNotificationSettings(profileRes.data.settings?.notifications || DEFAULT_NOTIFICATION_SETTINGS_FRONTEND);
+            setPrivacySettings(profileRes.data.settings?.privacy || DEFAULT_PRIVACY_SETTINGS_FRONTEND);
         } catch (err) {
             console.error('Error fetching profile data:', err);
             setFetchError('Failed to load profile data. Please try again.');
@@ -6707,7 +6727,9 @@ function ProfilePage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-gray-700/50">
                     <div className="flex-1">
                         <p className="text-gray-400 text-sm mb-1">Email</p>
-                        <p className="text-white text-lg">{profileData.emailId || 'N/A'}</p>
+                        <p className="text-white text-lg">
+                            {settings.showEmail ? (profileData.emailId || 'N/A') : 'Hidden'}
+                        </p>
                     </div>
                     <button className="btn btn-ghost btn-sm text-indigo-400 hover:bg-gray-700 mt-2 md:mt-0" disabled>Edit</button>
                 </div>
@@ -6864,10 +6886,15 @@ function ProfilePage() {
 
     const renderBadges = () => (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            <h3 className="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-4">Badges</h3>
+            <h3 className="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-4">Badges & Achievements</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {badges.map((badge) => (
-                    <div key={badge.id} className={`p-6 rounded-xl border-2 ${badge.unlocked ? 'bg-slate-800/50 border-cyan-400/50' : 'bg-slate-800/30 border-slate-600'}`}>
+                    <motion.div 
+                        key={badge.id} 
+                        className={`p-6 rounded-xl border-2 transition-all duration-300 ${badge.unlocked ? 'bg-slate-800/50 border-cyan-400/50 hover:border-cyan-400/70' : 'bg-slate-800/30 border-slate-600'}`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
                         <div className="flex items-center gap-4">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${badge.unlocked ? `bg-${badge.color}-500` : 'bg-slate-600'}`}>
                                 <Award size={24} className="text-white" />
@@ -6875,13 +6902,45 @@ function ProfilePage() {
                             <div className="flex-1">
                                 <h4 className="text-white font-semibold">{badge.name}</h4>
                                 <p className="text-slate-400 text-sm">{badge.description}</p>
-                                <div className={`text-xs mt-1 ${badge.unlocked ? 'text-green-400' : 'text-slate-500'}`}>
-                                    {badge.unlocked ? '✓ Earned' : 'Locked'}
+                                <div className={`text-xs mt-1 flex items-center gap-1 ${badge.unlocked ? 'text-green-400' : 'text-slate-500'}`}>
+                                    {badge.unlocked ? (
+                                        <>
+                                            <CheckCircle size={12} />
+                                            <span>Earned</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Lock size={12} />
+                                            <span>Locked</span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
+            </div>
+            
+            {/* Badge Summary */}
+            <div className="mt-8 p-6 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/20">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h4 className="text-white font-semibold text-lg">Badge Progress</h4>
+                        <p className="text-slate-400 text-sm">Track your achievement progress</p>
+                    </div>
+                    <div className="text-right">
+                        <div className="text-2xl font-bold text-cyan-400">
+                            {badges.filter(b => b.unlocked).length}/{badges.length}
+                        </div>
+                        <div className="text-slate-400 text-sm">Badges Earned</div>
+                    </div>
+                </div>
+                <div className="mt-4 w-full bg-slate-700 rounded-full h-2">
+                    <div 
+                        className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${(badges.filter(b => b.unlocked).length / badges.length) * 100}%` }}
+                    ></div>
+                </div>
             </div>
         </motion.div>
     );
@@ -6891,13 +6950,17 @@ function ProfilePage() {
             <h3 className="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-4">Points & Stats</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { label: 'Problems Solved', value: stats.problemsSolved, total: stats.totalProblems, icon: Code },
-                    { label: 'Current Streak', value: stats.currentStreak, icon: Star },
-                    { label: 'Max Streak', value: stats.maxStreak, icon: Star },
-                    { label: 'Global Rank', value: `#${stats.rank.toLocaleString()}`, icon: Globe }
+                    { label: 'Total Points', value: stats.points || 0, icon: Trophy, color: 'bg-yellow-500' },
+                    { label: 'Problems Solved', value: stats.problemsSolved || 0, total: stats.totalProblems || 0, icon: Code, color: 'bg-cyan-500' },
+                    { label: 'Current Streak', value: stats.currentStreak || 0, icon: Star, color: 'bg-orange-500' },
+                    { label: 'Max Streak', value: stats.maxStreak || 0, icon: Flame, color: 'bg-red-500' },
+                    { label: 'Easy Solved', value: stats.easySolved || 0, total: stats.easyTotal || 0, icon: CheckCircle, color: 'bg-green-500' },
+                    { label: 'Medium Solved', value: stats.mediumSolved || 0, total: stats.mediumTotal || 0, icon: Target, color: 'bg-yellow-500' },
+                    { label: 'Hard Solved', value: stats.hardSolved || 0, total: stats.hardTotal || 0, icon: Award, color: 'bg-red-500' },
+                    { label: 'Global Rank', value: stats.rank ? `#${stats.rank.toLocaleString()}` : 'Unranked', icon: Globe, color: 'bg-purple-500' }
                 ].map((stat) => (
-                    <div key={stat.label} className="p-6 bg-slate-800/50 rounded-xl text-center">
-                        <div className="w-12 h-12 bg-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <div key={stat.label} className="p-6 bg-slate-800/50 rounded-xl text-center hover:bg-slate-800/70 transition-colors">
+                        <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                             <stat.icon size={24} className="text-white" />
                         </div>
                         <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>

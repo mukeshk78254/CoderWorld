@@ -684,6 +684,24 @@ const authSlice = createSlice({
     // Reducer to manually clear the error state from the UI
     clearError: (state) => {
       state.error = null;
+    },
+    // Reducer to update profile image in user state
+    updateProfileImage: (state, action) => {
+      if (state.user) {
+        state.user.profileImage = action.payload;
+        // Also update localStorage
+        const updatedUser = { ...state.user, profileImage: action.payload };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+    },
+    // Reducer to remove profile image from user state
+    removeProfileImage: (state) => {
+      if (state.user) {
+        state.user.profileImage = null;
+        // Also update localStorage
+        const updatedUser = { ...state.user, profileImage: null };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
     }
   },
   extraReducers: (builder) => {
@@ -768,5 +786,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { clearError } = authSlice.actions; // Export actions
+export const { clearError, updateProfileImage, removeProfileImage } = authSlice.actions; // Export actions
 export default authSlice.reducer;
