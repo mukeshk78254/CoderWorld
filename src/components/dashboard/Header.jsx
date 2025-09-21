@@ -359,7 +359,7 @@ function Header({ user, problem, refreshing, onRefresh }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-end justify-center p-4 pb-20"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
                     >
                         {/* Backdrop */}
                         <motion.div
@@ -372,11 +372,11 @@ function Header({ user, problem, refreshing, onRefresh }) {
                         
                         {/* Modal */}
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 50 }}
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 50 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="relative bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full mx-4 mb-8"
+                            className="relative bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full mx-4"
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between p-6 border-b border-slate-700">
